@@ -19,11 +19,15 @@ import javax.inject.Inject;
 import xyz.megundo.busara.R;
 import xyz.megundo.busara.di.Injector;
 import xyz.megundo.busara.di.ScreenInjector;
+import xyz.megundo.busara.ui.ScreenNavigator;
 
 public abstract class BaseActivity extends AppCompatActivity {
 
     @Inject
     ScreenInjector screenInjector;
+
+    @Inject
+    ScreenNavigator screenNavigator;
 
     /* Retain component across configuration changes*/
     private String INSTANCE_ID_KEY = "instance_Id";
@@ -46,17 +50,29 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
 
         router = Conductor.attachRouter(this, screenContainer, savedInstanceState);
+        screenNavigator.initWithRouter(router, initialScreen());
         monitorBackStack();
         super.onCreate(savedInstanceState);
     }
 
+
     @LayoutRes
     protected abstract int layoutRes();
+
+    protected abstract Controller initialScreen();
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putString(INSTANCE_ID_KEY, instanceId);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (screenNavigator.pop()) {
+            super.onBackPressed();
+        }
+
     }
 
     public String getInstanceId() {
@@ -67,6 +83,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        screenNavigator.clear();
         if (isFinishing()) {
             Injector.clearComponent(this);
         }
