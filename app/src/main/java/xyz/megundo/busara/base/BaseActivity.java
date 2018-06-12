@@ -1,5 +1,6 @@
 package xyz.megundo.busara.base;
 
+
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
@@ -12,6 +13,7 @@ import com.bluelinelabs.conductor.Controller;
 import com.bluelinelabs.conductor.ControllerChangeHandler;
 import com.bluelinelabs.conductor.Router;
 
+import java.util.Set;
 import java.util.UUID;
 
 import javax.inject.Inject;
@@ -19,18 +21,25 @@ import javax.inject.Inject;
 import xyz.megundo.busara.R;
 import xyz.megundo.busara.di.Injector;
 import xyz.megundo.busara.di.ScreenInjector;
+import xyz.megundo.busara.lifecycle.ActivityLifecycleTask;
+import xyz.megundo.busara.ui.ActivityViewInterceptor;
+import xyz.megundo.busara.ui.RouterProvider;
 import xyz.megundo.busara.ui.ScreenNavigator;
 
-public abstract class BaseActivity extends AppCompatActivity {
+
+public abstract class BaseActivity extends AppCompatActivity implements RouterProvider {
+
+    private static final String INSTANCE_ID_KEY = "instance_id";
 
     @Inject
     ScreenInjector screenInjector;
-
     @Inject
     ScreenNavigator screenNavigator;
+    @Inject
+    ActivityViewInterceptor activityViewInterceptor;
+    @Inject
+    Set<ActivityLifecycleTask> activityLifecycleTasks;
 
-    /* Retain component across configuration changes*/
-    private String INSTANCE_ID_KEY = "instance_Id";
     private String instanceId;
     private Router router;
 
@@ -42,24 +51,52 @@ public abstract class BaseActivity extends AppCompatActivity {
             instanceId = UUID.randomUUID().toString();
         }
         Injector.inject(this);
-        setContentView(layoutRes());
 
+        activityViewInterceptor.setContentView(this, layoutRes());
         ViewGroup screenContainer = findViewById(R.id.screen_container);
         if (screenContainer == null) {
             throw new NullPointerException("Activity must have a view with id: screen_container");
         }
 
         router = Conductor.attachRouter(this, screenContainer, savedInstanceState);
-        screenNavigator.initWithRouter(router, initialScreen());
         monitorBackStack();
+        for (ActivityLifecycleTask task : activityLifecycleTasks) {
+            task.onCreate(this);
+        }
         super.onCreate(savedInstanceState);
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        for (ActivityLifecycleTask task : activityLifecycleTasks) {
+            task.onStart(this);
+        }
+    }
 
-    @LayoutRes
-    protected abstract int layoutRes();
+    @Override
+    protected void onResume() {
+        super.onResume();
+        for (ActivityLifecycleTask task : activityLifecycleTasks) {
+            task.onResume(this);
+        }
+    }
 
-    protected abstract Controller initialScreen();
+    @Override
+    protected void onPause() {
+        super.onPause();
+        for (ActivityLifecycleTask task : activityLifecycleTasks) {
+            task.onPause(this);
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        for (ActivityLifecycleTask task : activityLifecycleTasks) {
+            task.onStop(this);
+        }
+    }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -69,28 +106,36 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (screenNavigator.pop()) {
+        if (!screenNavigator.pop()) {
             super.onBackPressed();
         }
-
     }
 
+    @Override
+    public Router getRouter() {
+        return router;
+    }
+
+    @LayoutRes
+    protected abstract int layoutRes();
+
     public String getInstanceId() {
-        //have a unique key for each activity
         return instanceId;
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        screenNavigator.clear();
         if (isFinishing()) {
             Injector.clearComponent(this);
+        }
+        activityViewInterceptor.clear();
+        for (ActivityLifecycleTask task : activityLifecycleTasks) {
+            task.onDestroy(this);
         }
     }
 
     public ScreenInjector getScreenInjector() {
-
         return screenInjector;
     }
 

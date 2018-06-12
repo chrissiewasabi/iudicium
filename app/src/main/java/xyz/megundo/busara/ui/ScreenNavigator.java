@@ -10,4 +10,8 @@ public interface ScreenNavigator {
     boolean pop();
 
     void clear();
+
+    void goToVideos(String catName, String catNumber);
+
+
 }

@@ -3,7 +3,6 @@ package xyz.megundo.busara.videos;
 
 import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,20 +17,21 @@ import butterknife.ButterKnife;
 import xyz.megundo.busara.R;
 import xyz.megundo.busara.models.Videos;
 
-import static android.support.constraint.Constraints.TAG;
-
 public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.ContributorViewHolder> {
 
     private final List<Videos> data = new ArrayList<>();
+    private final VideoClickedListener listener;
 
-    VideoListAdapter() {
+    public VideoListAdapter(VideoClickedListener listener) {
+        this.listener = listener;
         setHasStableIds(true);
     }
+
 
     @Override
     public ContributorViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_listing_item, parent, false);
-        return new ContributorViewHolder(itemView);
+        return new ContributorViewHolder(itemView, listener);
     }
 
     @Override
@@ -61,6 +61,10 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.Cont
         }
     }
 
+    interface VideoClickedListener {
+
+        void onVideoClicked(Videos video);
+    }
     static final class ContributorViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.tv_video_name)
@@ -72,24 +76,24 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.Cont
         @BindView(R.id.iv_avatar)
         ImageView avatarImageView;
 
-        ContributorViewHolder(View itemView) {
+        private Videos listing;
+
+        ContributorViewHolder(View itemView, VideoClickedListener listener) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            itemView.setOnClickListener(v -> {
+                if (listing != null) {
+                    listener.onVideoClicked(listing);
+                }
+            });
         }
 
         void bind(Videos listing) {
+            this.listing = listing;
             listingnameText.setText(listing.name());
             listingIDText.setText(listing.description());
-           /* Glide.with(avatarImageView.getContext())
-                    .load(listing.pictureHref())
-                    .into(avatarImageView);*/
-            Log.d(TAG, "bind: " + listing.file_path());
+            //Todo show thumbnail with glide
 
-        /*    Glide
-                    .with(avatarImageView.getContext())
-                    .asBitmap()
-                    .load(Uri.fromFile(new File(listing.file_path())))
-                    .into(avatarImageView);*/
         }
     }
 }

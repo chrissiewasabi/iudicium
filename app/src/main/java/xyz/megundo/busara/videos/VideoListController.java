@@ -48,7 +48,7 @@ public class VideoListController extends BaseController {
     @Override
     protected void onViewBound(View view) {
         videosList.setLayoutManager(new LinearLayoutManager(view.getContext()));
-        videosList.setAdapter(new VideoListAdapter());
+        videosList.setAdapter(new VideoListAdapter(presenter));
     }
 
     @Override

@@ -7,12 +7,13 @@ import javax.inject.Inject;
 import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
 import xyz.megundo.busara.models.Category;
+import xyz.megundo.busara.models.Videos;
 
-public class CategoryRequester {
+public class DataRequester {
     private final CategoryService service;
 
     @Inject
-    CategoryRequester(CategoryService service) {
+    DataRequester(CategoryService service) {
         this.service = service;
     }
 
@@ -21,5 +22,14 @@ public class CategoryRequester {
                 .map(CategoriesResponse::categories)
                 .subscribeOn(Schedulers.io());
     }
+
+
+    public Single<List<Videos>> getVideos() {
+        return service.getVideoList()
+                .map(VideosResponse::videos)
+                .subscribeOn(Schedulers.io());
+    }
+
+
 
 }

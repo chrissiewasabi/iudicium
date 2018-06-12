@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Busara</string>
+    <string name="api_error_categories">error loading categories</string>
+    <string name="dummyVideo">video name</string>
+    <string name="dummyVideoDesc">things decribing this video</string>
+    <string name="content_description_avatar_image">avatar</string>
+    <string name="title_category">Categories</string>
 </resources>
