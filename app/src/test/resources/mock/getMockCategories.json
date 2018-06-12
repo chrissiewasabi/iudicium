@@ -1,0 +1,47 @@
+{
+  "count": 5,
+  "next": null,
+  "previous": null,
+  "page_size": 100,
+  "current_page": 1,
+  "total_pages": 1,
+  "start_index": 1,
+  "end_index": 5,
+  "results": [
+    {
+      "id": 2,
+      "name": "Merchandising",
+      "description": "Understand merchandising and outline its importance, Key merchandising aspects,  Merchandising activities, Understanding the benefits of merchandising.",
+      "is_active": true,
+      "created": "2018-03-15T11:25:43.594535+03:00"
+    },
+    {
+      "id": 3,
+      "name": "Customer service",
+      "description": "Define marketing and state its importance, Customer attraction and retention, Types of marketing efforts, Investment of time and money.",
+      "is_active": true,
+      "created": "2018-03-15T11:26:29.852023+03:00"
+    },
+    {
+      "id": 4,
+      "name": "Record keeping",
+      "description": "Outline the importance of keeping records in business.",
+      "is_active": true,
+      "created": "2018-03-15T11:27:14.606007+03:00"
+    },
+    {
+      "id": 5,
+      "name": "Manage your finances",
+      "description": "Separate personal and duka finances. Payment of personal salaries, Proper record-keeping,  Repayment to the business any drawings of salary, Separate places for various monies,  Separate bank account for business.",
+      "is_active": true,
+      "created": "2018-03-15T11:28:08.066369+03:00"
+    },
+    {
+      "id": 6,
+      "name": "Supply Chain",
+      "description": "Identify elements of the supply chain for a duka. Understand the importance of managing the purchasing function.",
+      "is_active": true,
+      "created": "2018-03-15T11:29:53.557702+03:00"
+    }
+  ]
+}
