@@ -26,7 +26,5 @@ caching the videos
 
 ```
 
-## Apk 
 
-The apk file can be downloaded [here](https://drive.google.com/open?id=1gfglLrFbvNUQsnZfYMVOqEWCwqlbI_iS)
 
