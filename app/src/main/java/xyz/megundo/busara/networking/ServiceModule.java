@@ -22,6 +22,8 @@ public abstract class ServiceModule {
         return new Moshi.Builder()
                 .add(AdapterFactory.create())
                 .build();
+
+
     }
 
     @Provides
