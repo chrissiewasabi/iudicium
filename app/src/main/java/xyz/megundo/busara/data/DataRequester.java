@@ -17,6 +17,7 @@ public class DataRequester {
         this.service = service;
     }
 
+    //jhg
     public Single<List<Category>> getCategories() {
         return service.getCategories()
                 .map(CategoriesResponse::categories)
