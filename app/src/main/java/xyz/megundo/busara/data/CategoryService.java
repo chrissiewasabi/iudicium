@@ -7,14 +7,14 @@ import retrofit2.http.Headers;
 public interface CategoryService {
 
     @Headers({
-            "Authorization: Bearer Fev8A8XIy7KyoahLjrEi6L46bTjlKZ"
+            "Authorization: Bearer F3w65Zsn26OFi0LrYSVP4ukynh1BuF"
 
     })
     @GET("categories")
     Single<CategoriesResponse> getCategories();
 
     @Headers({
-            "Authorization: Bearer Fev8A8XIy7KyoahLjrEi6L46bTjlKZ"
+            "Authorization: Bearer F3w65Zsn26OFi0LrYSVP4ukynh1BuF"
 
     })
     @GET("videos")

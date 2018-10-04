@@ -27,12 +27,15 @@ public abstract class NetworkModule {
 
 
 
+
+
+
         return okHttpClientBuilder.build();
     }
 
     @Provides
     @Named("base_url")
     static String provideBaseUrl(){
-        return "http://api.smartduka.busaracenterlab.org/api/v1/";
+        return "http://api.smartduka.org/api/v1/";
     }
 }

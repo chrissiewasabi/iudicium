@@ -19,4 +19,6 @@ public class MainActivity extends BaseActivity {
     public Controller initialScreen() {
         return new CategoriesController();
     }
+
+
 }
